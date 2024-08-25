@@ -1,11 +1,23 @@
+//  Match Digits
+// function matchPattern(inputLine, pattern) {
+//   if (pattern.length === 1) {
+//     return inputLine.includes(pattern);
+//   } else if (pattern === '\\d') {
+//     return /\d/.test(inputLine);
+//   } else {
+//     throw new Error(`Unhandled pattern ${pattern}`);
+//   }
+// }
+
+//  Match alphanumeric
 function matchPattern(inputLine, pattern) {
-  if (pattern.length === 1) {
-    return inputLine.includes(pattern);
-  } else if (pattern === '\\d') {
-    return /\d/.test(inputLine);
-  } else {
-    throw new Error(`Unhandled pattern ${pattern}`);
-  }
+   if (pattern.length === 1) {
+      return inputLine.includes(pattern);
+   } else if (pattern === "\\w") {
+      return /\w/.test(inputLine);
+   } else {
+      throw new Error(`Unhandled pattern ${pattern}`);
+   }
 }
 
 function main() {
