@@ -5,6 +5,10 @@ function matchPattern(inputLine, pattern) {
     return /\d/.test(inputLine);
    } else if (pattern === "\\w") {
       return /\w/.test(inputLine);
+   } else if (/^\[.*\]$/.test(pattern)) {
+      const characters = pattern.slice(1, -1);
+      const regex = new RegExp(`[${characters}]`);
+      return regex.test(inputLine);
    } else {
       throw new Error(`Unhandled pattern ${pattern}`);
    }
