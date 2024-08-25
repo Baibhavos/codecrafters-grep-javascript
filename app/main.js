@@ -1,19 +1,19 @@
 function matchPattern(inputLine, pattern) {
-  function createRegexFromPattern(pattern) {
-    if (pattern === "\\d") {
+function createRegexFromPattern(part) {
+   if (part === "\\d") {
       return /\d/;
-    } else if (pattern === "\\w") {
+   } else if (part === "\\w") {
       return /\w/;
-    } else if (/^\[.*\]$/.test(pattern) && !pattern.startsWith("[^")) {
-      const characters = pattern.slice(1, -1);
+   } else if (/^\[.*\]$/.test(part) && !part.startsWith("[^")) {
+      const characters = part.slice(1, -1);
       return new RegExp(`[${characters}]`);
-    } else if (/^\[\^.*\]$/.test(pattern)) {
-      const characters = pattern.slice(2, -1);
+   } else if (/^\[\^.*\]$/.test(part)) {
+      const characters = part.slice(2, -1);
       return new RegExp(`[^${characters}]`);
-    } else {
+   } else {
       return new RegExp(part, "i");
-    }
-  }
+   }
+}
 
   if (pattern.includes(" ")) {
     const patternParts = pattern.split(/\s+/);
