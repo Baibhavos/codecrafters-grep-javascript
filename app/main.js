@@ -11,7 +11,7 @@ function matchPattern(inputLine, pattern) {
       const characters = pattern.slice(2, -1);
       return new RegExp(`[^${characters}]`);
     } else {
-      throw new Error(`Unhandled pattern ${pattern}`);
+      return new RegExp(part, "i");
     }
   }
 
