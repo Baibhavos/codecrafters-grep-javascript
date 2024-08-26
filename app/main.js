@@ -15,20 +15,30 @@ function matchPattern(inputLine, pattern) {
       }
    }
 
-   if (pattern.includes(" ")) {
-      const patternParts = pattern.split(/\s+/);
-      let regexPattern = "";
-      for (const part of patternParts) {
-         regexPattern += createRegexFromPattern(part) + "\\s*";
-      }
-      regexPattern = regexPattern.trim();
+   function handleBackreferences(pattern) {
+      const captureGroupPattern = /\(([^()]+)\)/g;
+      const backreferencePattern = /\\(\d+)/g;
+      let match;
+      let groupNumber = 0;
+      let groupMap = {};
 
-      const regex = new RegExp(`${regexPattern}`, "i");
-      return regex.test(inputLine);
-   } else {
-      const regex = new RegExp(`${createRegexFromPattern(pattern)}`, "i");
-      return regex.test(inputLine);
+      pattern = pattern.replace(captureGroupPattern, (match, group) => {
+         groupNumber++;
+         groupMap[groupNumber] = group;
+         return `(${createRegexFromPattern(group)})`;
+      });
+
+      pattern = pattern.replace(backreferencePattern, (match, groupNum) => {
+         return `\\${groupNum}`;
+      });
+
+      return pattern;
    }
+
+   const modifiedPattern = handleBackreferences(pattern);
+   const regex = new RegExp(modifiedPattern, "i");
+
+   return regex.test(inputLine);
 }
 
 function main() {
