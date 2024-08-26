@@ -1,54 +1,33 @@
 function matchPattern(inputLine, pattern) {
-function createRegexFromPattern(part) {
-   if (part === "\\d") {
-      return /\d/;
-   } else if (part === "\\w") {
-      return /\w/;
-   } else if (/^\[.*\]$/.test(part) && !part.startsWith("[^")) {
-      const characters = part.slice(1, -1);
-      return new RegExp(`[${characters}]`);
-   } else if (/^\[\^.*\]$/.test(part)) {
-      const characters = part.slice(2, -1);
-      return new RegExp(`[^${characters}]`);
-   } else {
-      return new RegExp(part, "i");
-   }
-}
-
-  if (pattern.includes(" ")) {
-    const patternParts = pattern.split(/\s+/);
-    let currentIndex = 0;
-
-    for (const part of patternParts) {
-      const regex = createRegexFromPattern(part);
-      const match = regex.exec(inputLine.slice(currentIndex));
-
-      if (match) {
-        currentIndex += match[0].length;
+   function createRegexFromPattern(part) {
+      if (part === "\\d") {
+         return "\\d";
+      } else if (part === "\\w") {
+         return "\\w";
+      } else if (/^\[.*\]$/.test(part) && !part.startsWith("[^")) {
+         const characters = part.slice(1, -1);
+         return `[${characters}]`;
+      } else if (/^\[\^.*\]$/.test(part)) {
+         const characters = part.slice(2, -1);
+         return `[^${characters}]`;
       } else {
-        return false;
+         return part;
       }
-    }
+   }
 
-    return currentIndex === inputLine.length;
-  } else {
-    if (pattern.length === 1) {
-      return inputLine.includes(pattern);
-    } else if (pattern === "\\d") {
-      return /\d/.test(inputLine);
-    } else if (pattern === "\\w") {
-      return /\w/.test(inputLine);
-    } else if (/^\[.*\]$/.test(pattern) && !pattern.startsWith("[^")) {
-      const characters = pattern.slice(1, -1);
-      const regex = new RegExp(`[${characters}]`);
+   if (pattern.includes(" ")) {
+      const patternParts = pattern.split(/\s+/);
+      let regexPattern = "";
+      for (const part of patternParts) {
+         regexPattern += createRegexFromPattern(part) + "\\s*";
+      }
+      regexPattern = regexPattern.trim();
+
+      const regex = new RegExp(`^${regexPattern}$`, "i");
       return regex.test(inputLine);
-    } else if (/^\[\^.*\]$/.test(pattern)) {
-      const characters = pattern.slice(2, -1);
-      const regex = new RegExp(`[^${characters}]`);
+   } else {
+      const regex = new RegExp(`^${createRegexFromPattern(pattern)}$`, "i");
       return regex.test(inputLine);
-    } else {
-      throw new Error(`Unhandled pattern ${pattern}`);
-    }
   }
 }
 
